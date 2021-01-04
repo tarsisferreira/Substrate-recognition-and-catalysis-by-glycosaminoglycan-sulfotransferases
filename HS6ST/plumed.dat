@@ -1,41 +1,29 @@
-# Start of cvs.dat file
-# insert inside {} the correspondent index number of the described atoms. # @{atom type}−{#residue}
 RESTART 
 MOLINFO STRUCTURE=refe_sel.pdb
 
-# Essential when calculating CoM
 WHOLEMOLECULES STRIDE=10 ENTITY0=506,513,520,534,548,568,575,599,616,635,651,675,689,1737,1751,1771,1792,1813,1832,1846,1863,1882,1926,1932,1948,1959,1983,2004,2023,2034,2049,2073,2095,2112,2128,2145,3595,3615,3632,3656
 
-## Assign atoms to group names.
+# Assign atoms to group names.
 # Chooses only the the water oxygens for coordination number with water (CN_W)
-OW: GROUP ATOMS=5385-16022
-S: GROUP ATOMS=5348 #paps sulfate
-G: GROUP ATOMS=5330 #GAGO6
+OW: GROUP ATOMS=5523-27022
+S: GROUP ATOMS=5482 #paps sulfate
+G: GROUP ATOMS=5460 #GlcNAc-acceptor oxygen
 T: GROUP ATOMS=1248 #soluble exposed nitrogen from TRP
 
 dP:   DISTANCE ATOMS=S,G
-
 cn: COORDINATION GROUPA=T GROUPB=OW R_0=0.261 NLIST NL_CUTOFF=0.6 NL_STRIDE=100
-
 
 RANDOM_EXCHANGES 
 INCLUDE FILE=cvs.dat
-# Necessary when one is performing the simulations by parts. # Helps achieve better ergodicity.
-# Feeds the file with the declared CV to all the replicas.
-
-
 metadP: METAD ARG=dP,cn SIGMA=0.1,0.1 PACE=500 HEIGHT=1.5 BIASFACTOR=5 GRID_MIN=0,0 GRID_MAX=10,20 GRID_BIN=100,100 CALC_RCT RCT_USTRIDE=50 FILE=HILLS_dP3
 
 LOWER_WALLS ARG=dP AT=0.0 KAPPA=35100 EXP=2 OFFSET=0 LABEL=lwall
-
 UPPER_WALLS ARG=dP AT=1.5 KAPPA=35100 EXP=2 OFFSET=0 LABEL=uwall
 
-PRINT ARG=uwall.bias,lwall.bias FILE=bias STRIDE=100
-
+PRINT ARG=uwall.bias,lwall.bias FILE=bias STRIDE=100 
 PRINT ARG=dP,cn STRIDE=100  FILE=COLVAR
 
 bias: REWEIGHT_METAD TEMP=300
-
 HISTOGRAM ...
   ARG=dP
   GRID_MIN=0.0
@@ -45,12 +33,4 @@ HISTOGRAM ...
   LOGWEIGHTS=bias
   LABEL=hB
 ... HISTOGRAM
-
 DUMPGRID GRID=hB FILE=histoB STRIDE=100 FMT=%8.4f
-
-
-
-
-
-
-
