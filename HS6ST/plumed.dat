@@ -5,7 +5,7 @@ WHOLEMOLECULES STRIDE=10 ENTITY0=506,513,520,534,548,568,575,599,616,635,651,675
 
 # Assign atoms to group names.
 # Chooses only the the water oxygens for coordination number with water (CN_W)
-OW: GROUP ATOMS=5523-27022
+OW: @water
 S: GROUP ATOMS=5482 #paps sulfate
 G: GROUP ATOMS=5460 #GlcNAc-acceptor oxygen
 T: GROUP ATOMS=1248 #soluble exposed nitrogen from TRP
