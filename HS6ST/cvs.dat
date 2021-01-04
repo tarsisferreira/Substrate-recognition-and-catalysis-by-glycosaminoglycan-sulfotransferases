@@ -1,1 +1,32 @@
+# Start of cvs.dat file
+# insert inside {} the correspondent index number of the described atoms. # @{atom type}−{#residue}
+MOLINFO STRUCTURE=refe_sel.pdb
 
+WHOLEMOLECULES STRIDE=10 ENTITY0=506,513,520,534,548,568,575,599,616,635,651,675,689,1737,1751,1771,1792,1813,1832,1846,1863,1882,1926,1932,1948,1959,1983,2004,2023,2034,2049,2073,2095,2112,2128,2145,3595,3615,3632,3656
+
+# Assign atoms to group names.
+# Chooses only the the water oxygens for coordination number with water (CN_W)
+OW: @water
+S: GROUP ATOMS=5482 #paps sulfate
+G: GROUP ATOMS=5460 #GlcNAc-acceptor oxygen
+T: GROUP ATOMS=1248 #soluble exposed nitrogen from TRP
+
+dP:   DISTANCE ATOMS=S,G
+cn: COORDINATION GROUPA=T GROUPB=OW R_0=0.261 NLIST NL_CUTOFF=0.6 NL_STRIDE=100
+
+UPPER_WALLS ARG=dP AT=2. KAPPA=35100 EXP=2 OFFSET=0 LABEL=uwall
+UPPER_WALLS ARG=cn AT=6. KAPPA=35100 EXP=2 OFFSET=0 LABEL=uwall2
+LOWER_WALLS ARG=dP AT=0.2 KAPPA=35100 EXP=2 OFFSET=0 LABEL=lwall
+LOWER_WALLS ARG=cn AT=0. KAPPA=35100 EXP=2 OFFSET=0 LABEL=lwall2
+
+# Activate metadynamics in ene
+# depositing a Gaussian every 250 time steps,
+# with height equal to 1.2 kJoule/mol,
+# and width 140 kJoule/mol.
+# Well-tempered metadynamics is activated,
+# and the biasfactor is set to 16.0
+#
+wte: METAD ARG=ene PACE=250 HEIGHT=1.2 SIGMA=140.0 FILE=HILLS_PTWTE BIASFACTOR=16.0 TEMP=354.368
+
+# monitor the three variables and the metadynamics bias potential
+PRINT STRIDE=10 ARG=dP,cn,ene,wte.bias FILE=COLVAR_PTWTE
