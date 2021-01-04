@@ -1,0 +1,29 @@
+
+##########################################################################################
+#DO NOT LOOK AT Plucker right now, theta and phi can only see one boat conformation
+PUCKERING ATOMS=14614,14612,14626,14622,14620,14615  LABEL=puck
+
+##########################################################################################
+
+#set up distance iduo2-papsS
+O2: GROUP ATOMS=14628
+S: GROUP ATOMS=14727
+dP:   DISTANCE ATOMS=O2,S
+##########################################################################################
+
+metad: METAD ARG=dP,puck.qx,puck.qy,puck.qz PACE=500 HEIGHT=2.0 SIGMA=0.1,0.2,0.2,0.2 FILE=HILLS3 BIASFACTOR=50.0 GRID_MIN=0,-pi,-pi,-pi GRID_MAX=1.2,2pi,2pi,2pi TEMP=300.0 GRID_BIN=100,100,100,100
+
+UPPER_WALLS ARG=dP AT=1 KAPPA=35100 EXP=2 OFFSET=0 LABEL=uwall
+LOWER_WALLS ARG=dP,puck.qz AT=0.3,0.05 KAPPA=35100,1000.0 EXP=2,2 OFFSET=0,0 LABEL=lwall
+
+
+# monitor the two variables and the metadynamics bias potential
+PRINT STRIDE=10 ARG=*  FILE=COLVAR
+
+PRINT STRIDE=10 ARG=puck.phi,puck.theta,metad.bias  FILE=COLVAR2
+PRINT STRIDE=10 ARG=puck.phi,puck.amplitude,metad.bias  FILE=COLVAR3
+PRINT STRIDE=10 ARG=puck.amplitude,puck.theta,metad.bias  FILE=COLVAR4
+
+
+##########################################################################################
+
