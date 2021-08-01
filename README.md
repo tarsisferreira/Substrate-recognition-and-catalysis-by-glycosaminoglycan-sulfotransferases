@@ -1,1 +1,1 @@
-# Substrate-recognition-and-catalysis-by-glycosaminoglycan-sulfotransferases
+# Structural determinants of substrate recognition and catalysis by heparan sulfate sulfotransferases
